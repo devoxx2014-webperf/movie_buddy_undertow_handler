@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
+    <id>application</id>
+    <formats>
+        <format>zip</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <dependencySets>
+        <dependencySet>
+            <outputDirectory>/lib</outputDirectory>
+            <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
+            <useProjectArtifact>false</useProjectArtifact>
+            <unpack>false</unpack>
+            <scope>runtime</scope>
+        </dependencySet>
+        <dependencySet>
+            <outputDirectory></outputDirectory>
+            <outputFileNameMapping>${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
+            <useProjectArtifact>true</useProjectArtifact>
+            <unpack>false</unpack>
+            <scope>runtime</scope>
+            <useTransitiveDependencies>false</useTransitiveDependencies>
+            <excludes>
+                <exclude>io.undertow:*</exclude>
+                <exclude>org.jboss.xnio:*</exclude>
+                <exclude>javax.json:*</exclude>
+                <exclude>javax:*</exclude>
+                <exclude>org.jboss.logging:*</exclude>
+                <exclude>org.glassfish:*</exclude>
+                <exclude>org.jboss.logmanager:*</exclude>
+                <exclude>org.jboss.spec.javax.annotation:*</exclude>
+                <exclude>org.jboss.spec.javax.servlet:*</exclude>
+            </excludes>
+        </dependencySet>
+    </dependencySets>
+
+</assembly>
