@@ -7,7 +7,6 @@ package org.ehsavoie.moviebuddies.model;
 
 import io.undertow.server.HttpServerExchange;
 import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -25,14 +24,13 @@ public class SearchAllMovies implements Runnable {
 
     @Override
     public void run() {
-        try (InputStream in = new BufferedInputStream(SearchAllMovies.class.getClassLoader().getResourceAsStream("movies.json"));
-                ByteArrayOutputStream out = new ByteArrayOutputStream(1000000)) {
+        exchange.startBlocking();
+        try (InputStream in = new BufferedInputStream(SearchAllMovies.class.getClassLoader().getResourceAsStream("movies.json"))) {
             byte[] buffer = new byte[8];
             int length = 8;
             while ((length = in.read(buffer, 0, length)) > 0) {
-                out.write(buffer, 0, length);
+                exchange.getOutputStream().write(buffer, 0, length);
             }
-            exchange.getResponseSender().send(new String(out.toByteArray()));
             exchange.endExchange();
         } catch (IOException ioex) {
             throw new RuntimeException(ioex);
