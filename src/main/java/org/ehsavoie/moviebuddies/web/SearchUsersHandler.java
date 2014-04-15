@@ -8,15 +8,13 @@ package org.ehsavoie.moviebuddies.web;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
 import io.undertow.util.Headers;
+import io.undertow.util.StatusCodes;
+import java.io.BufferedInputStream;
+import java.io.InputStream;
 import static java.lang.Integer.parseInt;
 import java.util.List;
-import org.ehsavoie.moviebuddies.model.ComputeUserDistance;
-import org.ehsavoie.moviebuddies.model.ComputeUserShared;
-import org.ehsavoie.moviebuddies.model.SearchAllUsers;
-import org.ehsavoie.moviebuddies.model.SearchUsersById;
-import org.ehsavoie.moviebuddies.model.SearchUsersByName;
-import org.ehsavoie.moviebuddies.model.User;
 import static org.ehsavoie.moviebuddies.web.StartMovieBuddy.MYAPP;
+import static org.ehsavoie.moviebuddies.web.User.findUserById;
 
 /**
  *
@@ -56,7 +54,17 @@ public class SearchUsersHandler implements HttpHandler {
             }
             break;
             case "": {
-                exchange.dispatch(new SearchAllUsers(exchange));
+                exchange.startBlocking();
+                try (InputStream in = new BufferedInputStream(SearchAllUsers.class.getClassLoader().getResourceAsStream("users.json"))) {
+                    byte[] buffer = new byte[16];
+                    int length = 16;
+                    while ((length = in.read(buffer, 0, length)) > 0) {
+                        exchange.getOutputStream().write(buffer, 0, length);
+                    }
+                    exchange.endExchange();
+                } catch (Exception ex) {
+                    throw ex;
+                }
             }
             break;
             case "share": {
@@ -68,9 +76,19 @@ public class SearchUsersHandler implements HttpHandler {
             }
             break;
             default: {
-                exchange.dispatch(new SearchUsersById(exchange, parseInt(params[0]), users));
+                User user = findUserById(parseInt(params[0]), users);
+                if (user == null) {
+                    exchange.setResponseCode(StatusCodes.NOT_FOUND);
+                } else {
+                    exchange.getResponseSender().send(user.toString());
+                }
+                exchange.endExchange();
             }
             break;
         }
+    }
+
+    private boolean isLimit(int count, int limit) {
+        return limit > 0 && count >= limit;
     }
 }

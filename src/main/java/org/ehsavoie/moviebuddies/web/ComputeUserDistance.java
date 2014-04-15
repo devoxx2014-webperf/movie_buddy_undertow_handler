@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.ehsavoie.moviebuddies.model;
+package org.ehsavoie.moviebuddies.web;
 
 import io.undertow.server.HttpServerExchange;
 import static java.lang.Math.sqrt;
 import java.util.List;
 import java.util.Map.Entry;
-import static org.ehsavoie.moviebuddies.model.User.findUserById;
+import static org.ehsavoie.moviebuddies.web.User.findUserById;
 
 /**
  *

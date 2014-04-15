@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package org.ehsavoie.moviebuddies.model;
+package org.ehsavoie.moviebuddies.web;
 
 import static java.util.Collections.binarySearch;
 import java.util.List;

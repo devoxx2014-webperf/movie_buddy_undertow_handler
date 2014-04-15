@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.ehsavoie.moviebuddies.model;
+package org.ehsavoie.moviebuddies.web;
 
 import io.undertow.server.HttpServerExchange;
 import java.util.LinkedList;

@@ -10,14 +10,13 @@ import io.undertow.server.HttpServerExchange;
 import io.undertow.util.Headers;
 import io.undertow.util.Methods;
 import io.undertow.util.StatusCodes;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
-import org.ehsavoie.moviebuddies.model.JsonItem;
-import org.ehsavoie.moviebuddies.model.JsonLoader;
-import org.ehsavoie.moviebuddies.model.Movie;
-import org.ehsavoie.moviebuddies.model.RateMovie;
-import org.ehsavoie.moviebuddies.model.User;
-import org.ehsavoie.moviebuddies.model.UserRatesById;
+import java.util.Map;
+import static org.ehsavoie.moviebuddies.web.Movie.findMovieById;
 import static org.ehsavoie.moviebuddies.web.StartMovieBuddy.MYAPP;
+import static org.ehsavoie.moviebuddies.web.User.findUserById;
 
 /**
  *
@@ -37,16 +36,38 @@ public class RatesHandler implements HttpHandler {
 
     protected void doGet(HttpServerExchange exchange) throws Exception {
         final String[] params = URLParser.parse(PREFIX, exchange);
-        exchange.dispatch(new UserRatesById(exchange, Integer.parseInt(params[0]), users));
+         User user = findUserById(Integer.parseInt(params[0]), users);
+        if (user == null) {
+            exchange.setResponseCode(StatusCodes.NOT_FOUND);
+        } else {
+            List<String> result = new LinkedList<>();
+            if (user.rates != null) {
+                for (Map.Entry<Movie, Integer> rate : user.rates.entrySet()) {
+                    result.add("'" + rate.getKey().id + "':" + rate.getValue());
+                }
+            }
+            exchange.getResponseSender().send("[" + String.join(", ", result) + "]");
+        }
+        exchange.endExchange();
     }
 
     protected void doPost(HttpServerExchange exchange) throws Exception {
         exchange.startBlocking();
         List<JsonItem> items = JsonLoader.load(exchange.getInputStream());
-        exchange.setResponseCode(StatusCodes.FOUND);
+        exchange.setResponseCode(StatusCodes.MOVED_PERMENANTLY);
         exchange.getResponseHeaders().put(Headers.LOCATION, "http://" + exchange.getHostAndPort()
-                + MYAPP + new RateMovie(items.get(0), users, movies).rate());
+                + MYAPP + rate(items.get(0)));
         exchange.endExchange();
+    }
+
+    private String rate(JsonItem item) {
+        User user = findUserById(item.getInt("userId"), users);
+        Movie movie = findMovieById(item.getInt("movieId"), movies);
+        if (user.rates == null) {
+            user.rates = new HashMap<>();
+        }
+        user.rates.put(movie, item.getInt("rate"));
+        return "/rates/" + user.id;
     }
 
     @Override

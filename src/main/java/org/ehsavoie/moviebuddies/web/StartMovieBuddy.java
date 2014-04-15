@@ -10,9 +10,6 @@ import io.undertow.Undertow;
 import io.undertow.util.Headers;
 import java.util.ArrayList;
 import java.util.List;
-import org.ehsavoie.moviebuddies.model.LoadData;
-import org.ehsavoie.moviebuddies.model.Movie;
-import org.ehsavoie.moviebuddies.model.User;
 
 /**
  *

@@ -9,11 +9,6 @@ import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
 import io.undertow.util.Headers;
 import java.util.List;
-import org.ehsavoie.moviebuddies.model.Movie;
-import org.ehsavoie.moviebuddies.model.SearchAllMovies;
-import org.ehsavoie.moviebuddies.model.SearchMoviesByActors;
-import org.ehsavoie.moviebuddies.model.SearchMoviesByGenre;
-import org.ehsavoie.moviebuddies.model.SearchMoviesByTitle;
 import static org.ehsavoie.moviebuddies.web.StartMovieBuddy.MYAPP;
 
 /**

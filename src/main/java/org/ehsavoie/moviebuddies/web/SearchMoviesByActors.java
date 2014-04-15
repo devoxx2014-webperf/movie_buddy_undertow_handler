@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.ehsavoie.moviebuddies.model;
+package org.ehsavoie.moviebuddies.web;
 
 import io.undertow.server.HttpServerExchange;
 import java.util.LinkedList;
@@ -14,16 +14,16 @@ import java.util.regex.Pattern;
  *
  * @author Emmanuel Hugonnet (ehsavoie) <emmanuel.hugonnet@gmail.com>
  */
-public class SearchMoviesByTitle implements Runnable {
+public class SearchMoviesByActors implements Runnable {
 
     private final HttpServerExchange exchange;
-    private final Pattern title;
+    private final Pattern actors;
     private final List<Movie> allMovies;
     private final int limit;
 
-    public SearchMoviesByTitle(HttpServerExchange exchange, String title, List<Movie> allMovies, int limit) {
+    public SearchMoviesByActors(HttpServerExchange exchange, String actors, List<Movie> allMovies, int limit) {
         this.exchange = exchange;
-        this.title = Pattern.compile(title.toLowerCase());
+        this.actors = Pattern.compile(actors.toLowerCase());
         this.allMovies = allMovies;
         this.limit = limit;
     }
@@ -36,7 +36,7 @@ public class SearchMoviesByTitle implements Runnable {
             if (isLimit(count, limit)) {
                 break;
             }
-            if (title.matcher(movie.title).find()) {
+            if (actors.matcher(movie.actors).find()) {
                 count++;
                 result.add(movie.toString());
             }
