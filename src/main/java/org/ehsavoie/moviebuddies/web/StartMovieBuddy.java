@@ -55,16 +55,16 @@ public class StartMovieBuddy {
          PathHandler path = Handlers.path(Handlers.redirect(MYAPP))
          .addPrefixPath(MYAPP, manager.start());*/
 
-        LoadData.initializeData();
+        InitializeRates.loadRate();
         Undertow server = Undertow.builder()
                 .addHttpListener(port, hostName)
                 .setIoThreads(Runtime.getRuntime().availableProcessors() * 2)
                 .setBufferSize(1024 * 16)
                 .setWorkerThreads(50)
                 .setHandler(Handlers.header(Handlers.path(Handlers.resource(new WebappClassPathResourceManager(MYAPP, SearchMoviesHandler.class.getClassLoader())))
-                        .addPrefixPath(MYAPP + "/rates", new RatesHandler(LOADED_MOVIES, LOADED_USERS))
-                        .addPrefixPath(MYAPP + "/users", new SearchUsersHandler(LOADED_USERS))
-                        .addPrefixPath(MYAPP + "/movies", new SearchMoviesHandler(LOADED_MOVIES)), Headers.SERVER_STRING, "U-tow")).build();
+                        .addPrefixPath(MYAPP + "/rates", new RatesHandler())
+                        .addPrefixPath(MYAPP + "/users", new SearchUsersHandler())
+                        .addPrefixPath(MYAPP + "/movies", new SearchMoviesHandler()), Headers.SERVER_STRING, "U-tow")).build();
         server.start();
     }
 

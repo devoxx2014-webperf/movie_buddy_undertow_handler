@@ -1,0 +1,22 @@
+[
+{"userId":3022, "movieId": 772, "rate": 2 },
+{"userId":3022, "movieId": 24, "rate": 10},
+{"userId":3022, "movieId": 482, "rate": 4 },
+{"userId":3022, "movieId": 302, "rate": 7 },
+{"userId":3022, "movieId": 680, "rate": 6 },
+{"userId":9649, "movieId": 772, "rate": 2 },
+{"userId":9649, "movieId": 24, "rate": 8 },
+{"userId":9649, "movieId": 482, "rate": 9 },
+{"userId":9649, "movieId": 302, "rate": 3 },
+{"userId":9649, "movieId": 556, "rate": 8 },
+{"userId":2349, "movieId": 453, "rate": 7 },
+{"userId":2349, "movieId": 461, "rate": 9 },
+{"userId":2349, "movieId": 258, "rate":10},
+{"userId":2349, "movieId": 494, "rate": 9 },
+{"userId":2349, "movieId": 158, "rate": 4 },
+{"userId": 496, "movieId":682, "rate": 4 },
+{"userId": 496, "movieId":559, "rate": 7 },
+{"userId": 496, "movieId":537, "rate": 4 },
+{"userId": 496, "movieId":352, "rate": 3 },
+{"userId": 496, "movieId":5, "rate": 9 }
+]

@@ -20,7 +20,7 @@ public class User implements Comparable<User> {
   final String json;
   Map<Movie, Integer> rates;
 
-  private User(int _id, String name, String json) {
+  User(int _id, String name, String json) {
     this.id = _id;
     this.name = name;
     this.json = json;

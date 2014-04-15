@@ -20,7 +20,7 @@ public class Movie  implements Comparable<Movie>{
   final String genre;
   final String json;
 
-  private Movie(int id, String title, String actors, String genre, String json) {
+  Movie(int id, String title, String actors, String genre, String json) {
     this.id = id;
     this.title = title;
     this.actors = actors;

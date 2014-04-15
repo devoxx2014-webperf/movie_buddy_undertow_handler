@@ -12,9 +12,7 @@ import io.undertow.util.StatusCodes;
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 import static java.lang.Integer.parseInt;
-import java.util.List;
 import static org.ehsavoie.moviebuddies.web.StartMovieBuddy.MYAPP;
-import static org.ehsavoie.moviebuddies.web.User.findUserById;
 
 /**
  *
@@ -32,10 +30,8 @@ public class SearchUsersHandler implements HttpHandler {
      */
 
     private static final String PREFIX = MYAPP + "/users";
-    private final List<User> users;
 
-    public SearchUsersHandler(List<User> users) {
-        this.users = users;
+    public SearchUsersHandler() {
     }
 
     @Override
@@ -50,7 +46,8 @@ public class SearchUsersHandler implements HttpHandler {
                 } else {
                     limit = -1;
                 }
-                exchange.dispatch(new SearchUsersByName(exchange, params[1], users, limit));
+                exchange.getResponseSender().send(UserService.INSTANCE.searchUserByName(params[1], limit));
+                exchange.endExchange();
             }
             break;
             case "": {
@@ -68,15 +65,17 @@ public class SearchUsersHandler implements HttpHandler {
             }
             break;
             case "share": {
-                exchange.dispatch(new ComputeUserShared(exchange, parseInt(params[1]), parseInt(params[2]), users));
+                exchange.getResponseSender().send(UserService.INSTANCE.computeShare(parseInt(params[1]), parseInt(params[2])));
+                exchange.endExchange();
             }
             break;
             case "distance": {
-                exchange.dispatch(new ComputeUserDistance(exchange, parseInt(params[1]), parseInt(params[2]), users));
+                exchange.getResponseSender().send(UserService.INSTANCE.computeDistance(parseInt(params[1]), parseInt(params[2])));
+                exchange.endExchange();
             }
             break;
             default: {
-                User user = findUserById(parseInt(params[0]), users);
+                User user = UserService.INSTANCE.findUserById(parseInt(params[0]));
                 if (user == null) {
                     exchange.setResponseCode(StatusCodes.NOT_FOUND);
                 } else {
@@ -86,9 +85,5 @@ public class SearchUsersHandler implements HttpHandler {
             }
             break;
         }
-    }
-
-    private boolean isLimit(int count, int limit) {
-        return limit > 0 && count >= limit;
     }
 }

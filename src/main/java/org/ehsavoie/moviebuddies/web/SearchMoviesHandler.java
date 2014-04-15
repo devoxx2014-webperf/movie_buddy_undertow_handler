@@ -8,7 +8,6 @@ package org.ehsavoie.moviebuddies.web;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
 import io.undertow.util.Headers;
-import java.util.List;
 import static org.ehsavoie.moviebuddies.web.StartMovieBuddy.MYAPP;
 
 /**
@@ -24,10 +23,8 @@ public class SearchMoviesHandler implements HttpHandler {
 
      */
     private static final String PREFIX = MYAPP + "/movies";
-    private final List<Movie> movies;
 
-    public SearchMoviesHandler(List<Movie> movies) {
-        this.movies = movies;
+    public SearchMoviesHandler() {
     }
 
     @Override
@@ -40,15 +37,18 @@ public class SearchMoviesHandler implements HttpHandler {
                 final String criteria = params.length > 1 ? params[1] : "";
                 switch (criteria) {
                     case "title": {
-                        exchange.dispatch(new SearchMoviesByTitle(exchange, params[2], movies, limit));
+                        exchange.getResponseSender().send(MovieService.INSTANCE.searchMovieByTitle(params[2], limit));
+                        exchange.endExchange();
                     }
                     break;
                     case "actors": {
-                        exchange.dispatch(new SearchMoviesByActors(exchange, params[2], movies, limit));
+                        exchange.getResponseSender().send(MovieService.INSTANCE.searchMovieByActor(params[2], limit));
+                        exchange.endExchange();
                     }
                     break;
                     case "genre": {
-                        exchange.dispatch(new SearchMoviesByGenre(exchange, params[2], movies, limit));
+                        exchange.getResponseSender().send(MovieService.INSTANCE.searchMovieByGenre(params[2], limit));
+                        exchange.endExchange();
                     }
                     break;
                     default: {
@@ -62,9 +62,5 @@ public class SearchMoviesHandler implements HttpHandler {
             }
             break;
         }
-    }
-
-    protected boolean isLimit(int count, int limit) {
-        return limit > 0 && count >= limit;
     }
 }
